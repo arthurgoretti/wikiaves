@@ -1,6 +1,6 @@
 tti_metadata <- function(
     term,
-    tm = c("s", "f"),
+    tm = "f",
     verbose = T,
     download = F,
     path = getwd(),
@@ -9,13 +9,14 @@ tti_metadata <- function(
     metadata_sys_sleep = .1,
     download_sys_sleep = .0001,
     force = F) {
-  wa_metadata <- tibble::tibble(
-    term = term
-  ) |>
+  wa_metadata <-
+    tibble::tibble(
+      term = term
+    ) |>
     dplyr::mutate(
       taxonomy = purrr::map(
         term,
-        wa_get_taxons_json
+        tti_get_taxons_json
       )
     ) |>
     tidyr::unnest(taxonomy)
@@ -43,7 +44,7 @@ tti_metadata <- function(
       registers = purrr::map(
         species_id,
         ~{
-          wa_get_registers_by_id(.,
+          tti_get_registros_por_id(.,
                                  tm = tm,
                                  sys_sleep = metadata_sys_sleep)
         }
@@ -61,9 +62,9 @@ tti_metadata <- function(
 
   if (verbose) {
     cat(nrow(wa_metadata),
-        "registers fetched from",
-        dplyr::n_distinct(wa_metadata$id),
-        "distinct IDs.\n")
+        "registros avaliados com base em",
+        dplyr::n_distinct(wa_metadata$species_id),
+        "IDs distintos.\n")
   }
 
   if(download) {

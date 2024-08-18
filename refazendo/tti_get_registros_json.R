@@ -1,7 +1,7 @@
 tti_get_registros_json <- function(
     id,
     p = 1,
-    tm = c("s", "f"),
+    tm = "f",
     t = "s") {
     fromJSON_safe <- purrr::possibly(
       jsonlite::fromJSON,
